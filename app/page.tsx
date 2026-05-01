@@ -13,12 +13,13 @@ export default function TributePage() {
   const playerRef = useRef<YT.Player | null>(null)
   const [playerReady, setPlayerReady] = useState(false)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowIntro(false)
-    }, 3500)
-    return () => clearTimeout(timer)
-  }, [])
+  const startTribute = () => {
+    setShowIntro(false)
+    if (playerRef.current && playerReady) {
+      playerRef.current.playVideo()
+      setIsPlaying(true)
+    }
+  }
 
   useEffect(() => {
     // Load YouTube IFrame API
@@ -41,8 +42,6 @@ export default function TributePage() {
         events: {
           onReady: (event: any) => {
             setPlayerReady(true)
-            event.target.playVideo()
-            setIsPlaying(true)
           },
         },
       })
@@ -130,9 +129,16 @@ export default function TributePage() {
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-6">
             To the most amazing woman <br className="hidden md:block" /> in the world...
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground font-serif italic">
+          <p className="text-xl md:text-2xl text-muted-foreground font-serif italic mb-12">
             Even heaven pales in comparison to your beauty.
           </p>
+          <button
+            onClick={startTribute}
+            disabled={!playerReady}
+            className="px-8 py-3 rounded-full bg-primary text-primary-foreground font-serif text-xl shadow-lg hover:scale-105 transition-transform animate-fade-in disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {playerReady ? "Enter Her World" : "Preparing..."}
+          </button>
         </div>
       </div>
 
