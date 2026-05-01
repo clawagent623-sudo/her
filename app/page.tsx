@@ -1,14 +1,13 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Heart, Volume2, VolumeX, ChevronDown, Sparkles, Music } from "lucide-react"
+import { Heart, ChevronDown, Sparkles } from "lucide-react"
 import { HeroSection } from "@/components/hero-section"
 import { QuoteCard } from "@/components/quote-card"
 import { PhotoGallery } from "@/components/photo-gallery"
 import { FloatingHearts } from "@/components/floating-hearts"
 
 export default function TributePage() {
-  const [isPlaying, setIsPlaying] = useState(false)
   const [showIntro, setShowIntro] = useState(true)
   const playerRef = useRef<YT.Player | null>(null)
   const [playerReady, setPlayerReady] = useState(false)
@@ -17,7 +16,6 @@ export default function TributePage() {
     setShowIntro(false)
     if (playerRef.current && playerReady) {
       playerRef.current.playVideo()
-      setIsPlaying(true)
     }
   }
 
@@ -54,17 +52,6 @@ export default function TributePage() {
     }
   }, [])
 
-  const toggleAudio = () => {
-    if (playerRef.current && playerReady) {
-      if (isPlaying) {
-        playerRef.current.pauseVideo()
-        setIsPlaying(false)
-      } else {
-        playerRef.current.playVideo()
-        setIsPlaying(true)
-      }
-    }
-  }
 
   const quotes = [
     {
@@ -147,25 +134,6 @@ export default function TributePage() {
         <div id="youtube-player" />
       </div>
       
-      {/* Song Title Display */}
-      {isPlaying && (
-        <div className="fixed bottom-20 right-6 z-50 bg-card/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-border animate-fade-in">
-          <p className="text-sm text-foreground font-medium flex items-center gap-2">
-            <Music className="w-4 h-4 text-primary animate-pulse" />
-            Just The Way You Are - Bruno Mars
-          </p>
-        </div>
-      )}
-
-      {/* Music Toggle Button */}
-      <button
-        onClick={toggleAudio}
-        disabled={!playerReady}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-primary/90 text-primary-foreground shadow-lg hover:bg-primary transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
-        aria-label={isPlaying ? "Pause music" : "Play music"}
-      >
-        {isPlaying ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
-      </button>
 
       {/* Hero Section */}
       <HeroSection mainImage={images[0].src} />
